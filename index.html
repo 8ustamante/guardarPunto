@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPS TERRAGRATA</title>
+</head>
+<body>
+
+    <p>Distancia horizontal: <span id="MetrosFaltantes">0</span>metros.</p>
+
+    <script>
+        let MetrosFaltantes = document.getElementById('MetrosFaltantes');
+
+        navigator.geolocation.getCurrentPosition(success, error);
+
+function success(position) {
+    const currentCoords = {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+        altitude: position.coords.altitude || 0 // Altitud actual en metros
+    };
+
+    // Coordenadas del otro punto (latitud, longitud, altitud)
+    const otherPoint = {
+        latitude: 4.8219174,
+        longitude: -75.6626162,
+        altitude: 47 // Altitud del otro punto en metros
+    };
+    // 4.821883483948374, -75.66230987007268
+    // 4.8219174,-75.6626162,94m
+    const distance = calculateDistance(currentCoords, otherPoint);
+    const altitudeDifference = Math.abs(currentCoords.altitude - otherPoint.altitude);
+
+    console.log(`Distancia horizontal: ${distance.toFixed(2)} metros`);
+    MetrosFaltantes.innerHTML = distance.toFixed(2);
+    console.log(`Diferencia de altitud: ${altitudeDifference.toFixed(2)} metros`);
+}
+
+function error(err) {
+    console.warn(`ERROR(${err.code}): ${err.message}`);
+}
+
+function calculateDistance(coord1, coord2) {
+    const R = 6371000; // Radio de la Tierra en metros
+    const lat1 = coord1.latitude * (Math.PI / 180);
+    const lat2 = coord2.latitude * (Math.PI / 180);
+    const deltaLat = (coord2.latitude - coord1.latitude) * (Math.PI / 180);
+    const deltaLon = (coord2.longitude - coord1.longitude) * (Math.PI / 180);
+
+    // Fórmula de Haversine
+    const a = Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
+              Math.cos(lat1) * Math.cos(lat2) *
+              Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
+    
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    
+    return R * c; // Distancia horizontal en metros
+}
+    </script>
+</body>
+</html>
