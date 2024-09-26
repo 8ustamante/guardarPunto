@@ -34,8 +34,10 @@
             const distance = calculateDistance(currentCoords, otherPoint);
             const altitudeDifference = Math.abs(currentCoords.altitude - otherPoint.altitude);
 
-            console.log(`Distancia horizontal: ${distance.toFixed(2)} metros`);
+            // Actualiza el valor de MetrosFaltantes en el DOM
             MetrosFaltantes.innerHTML = distance.toFixed(2);
+
+            console.log(`Distancia horizontal: ${distance.toFixed(2)} metros`);
             console.log(`Diferencia de altitud: ${altitudeDifference.toFixed(2)} metros`);
         }
 
